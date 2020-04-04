@@ -24,7 +24,7 @@ body {
     width: 100%;
     margin: 1.5em;
     margin-left: auto;
-    min-height: calc(100vh - 4.5em);
+    min-height: calc(100vh - 5em);
 
     display: flex;
     flex-direction: column;
@@ -105,11 +105,14 @@ footer {
 
     text-align: center;
     font-family: Apple;
-    font-size: 0.75em;
     justify-content: center;
     color: #fbfbfb;
     background-color: #082a44;
     height: 2em;
+}
+
+footer a{
+    color: #9ac4dd;
 }
 
 /* Small Class */

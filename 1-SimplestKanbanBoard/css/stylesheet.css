@@ -1,3 +1,117 @@
 /* css/stylesheet.css */
 /* Ross Nelson Assignment 1: The Simplest Kanban Board */
 /* April 7th, 2020 */
+
+@font-face {
+    font-family: Demonized;
+    src: url("../fonts/Demonized.ttf");
+}
+
+@font-face {
+    font-family: Apple;
+    src: url("../fonts/AppleGaramond.ttf");
+}
+
+body {
+    background-color: #9ac4dd;
+    margin: 1.5em;
+}
+
+.wrapper{
+    width: 100%;
+    margin: auto;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+#kanban {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+
+    background-color: #d91d38;
+    color: #fbfbfb;
+    width: 30%;
+    border-radius: 0.5em;
+}
+
+.board h2 {
+    align-self: left;
+    color: #082a44;
+    margin: 1em;
+    font-family: Demonized;
+}
+
+.board .list {
+    display: flex;
+    flex-direction: column;
+    
+    background-color: #082a44;
+    border-radius: 0.5em;
+    margin: 1em;
+}
+
+.board ul li p {
+    margin: 1em;
+}
+
+#todo #new {
+    margin-top: 2em;
+    margin-bottom: 0em;
+}
+
+#todo #new h4 {
+    margin: 1em;
+    margin-bottom: 0.5em;
+    font-family: Apple;
+}
+
+#todo #new #textBox {
+    width: 90%;
+    margin: 1em;
+    margin-top: 0.5em;
+    align-self: center;
+}
+
+.board .list .button {
+    width: 10em;
+    align-self: end;
+    margin: 1em;
+    margin-top: 0em;
+}
+
+.board ul {
+    list-style: none;
+    padding-left: 0;
+    font-family: Apple;
+    margin-bottom: 0em;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.75em;
+}
+
+/* Small Class */
+@media screen and (max-width: 725px) {
+    /* comes into effect for screens less than or equal to 725 pixels */
+
+    #kanban {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .board {
+        width: 100%;
+        margin: 1em;
+    }
+}

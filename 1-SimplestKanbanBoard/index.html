@@ -4,33 +4,63 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/stylesheet.css">
     <title>The Simplest Kanban Board</title>
 </head>
+
 <body>
     <script src="script/script.js"></script>
-
-    <section id='kanban'>
-        <section id='todo'>
-            <h3>Todo</h3>
-            <section id='new'>
-                Create New Task
+    <div class='wrapper'>
+        <section id='kanban'>
+            <section class='board' id='todo'>
+                <h2>Todo</h2>
+                <section id='new' class='list'>
+                    <h4>
+                        Create New Task
+                    </h4>
+                    <br>
+                    <input id='textBox' type="text">
+                    <br>
+                    <input class='button' type="submit" value="Create Task">
+                </section>
+                <ul>
+                    <li class='list'>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua.</p>
+                        <br>
+                        <input class='button' type="submit" value="Start Task">
+                    </li>
+                </ul>
+            </section>
+            <section class='board' id='progress'>
+                <h2>In Progress</h2>
+                <ul>
+                    <li class='list'>
+                        <p>Facilisis sed odio morbi quis commodo odio.</p>
+                        <br>
+                        <input class='button' type="submit" value="Complete Task">
+                    </li>
+                </ul>
+            </section>
+            <section class='board' id='complete'>
+                <h2>Complete</h2>
+                <ul>
+                    <li class='list'>
+                        <p>Pulvinar etiam non quam lacus suspendisse.</p>
+                    </li>
+                </ul>
             </section>
         </section>
-        <section id='progress'>
-            <h3>In Progress</h3>
-        </section>
-        <section id='done'>
-            <h3>Done</h3>
-        </section>
-    </section>
-
+    </div>
     <footer>
         <small>Ross Nelson CSC360 Assignment 1: The simplest Kanban Board</small>
     </footer>
     </footer>
 </body>
+
 </html>

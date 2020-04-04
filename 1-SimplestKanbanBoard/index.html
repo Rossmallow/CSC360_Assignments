@@ -23,35 +23,34 @@
                         Create New Task
                     </h4>
                     <br>
-                    <input id='textBox' type="text">
+                    <input id='textBox' placeholder='New Task' type="text">
                     <br>
-                    <input class='button' type="submit" value="Create Task">
+                    <input class='button' onclick='createTask()' type="submit" value="Create Task">
                 </section>
-                <ul>
-                    <li class='list'>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua.</p>
+                <ul id='todoUL'>
+                    <li class='list' id='2'>
+                        <p>Get a full-time job.</p>
                         <br>
-                        <input class='button' type="submit" value="Start Task">
+                        <input class='button' onclick='startTask(this.parentNode.id)' type="submit" value="Start Task">
                     </li>
                 </ul>
             </section>
             <section class='board' id='progress'>
                 <h2>In Progress</h2>
-                <ul>
-                    <li class='list'>
-                        <p>Facilisis sed odio morbi quis commodo odio.</p>
+                <ul id='progressUL'>
+                    <li class='list' id='1'>
+                        <p>Self-Isolate to avoid COVID-19.</p>
                         <br>
-                        <input class='button' type="submit" value="Complete Task">
+                        <input class='button' onclick='completeTask(this.parentNode.id)' type="submit"
+                            value="Complete Task">
                     </li>
                 </ul>
             </section>
             <section class='board' id='complete'>
                 <h2>Complete</h2>
-                <ul>
-                    <li class='list'>
-                        <p>Pulvinar etiam non quam lacus suspendisse.</p>
+                <ul id='completeUL'>
+                    <li class='list' id='0'>
+                        <p>Finish CSC 360 Homework 1: The Simplest Kanban Board.</p>
                     </li>
                 </ul>
             </section>
@@ -59,7 +58,6 @@
     </div>
     <footer>
         <small>Ross Nelson CSC360 Assignment 1: The simplest Kanban Board</small>
-    </footer>
     </footer>
 </body>
 

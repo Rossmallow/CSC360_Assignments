@@ -22,7 +22,7 @@ SOLUTION = AddOne(SOLUTION);
 function Cell(props) {
     return (
         <text
-            className="cell"
+            className={props.className}
             min="0" max="8"
             maxLength="1"
             onClick={props.onClick}>
@@ -32,9 +32,18 @@ function Cell(props) {
 }
 
 class Board extends React.Component {
+    getClassName(i) {
+        let cName = "cell";
+        if (PUZZLE[i] !== null) {
+            cName += " hintCell";
+        }
+        return cName;
+    }
+
     renderCell(i) {
         return (
             <Cell
+                className={this.getClassName(i)}
                 value={this.props.cells[i]}
                 onClick={() => this.props.onClick(i)}
             />

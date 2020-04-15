@@ -38,11 +38,6 @@ body {
     -webkit-appearance: none;
     margin: 0;
   }
-
-  /* Make submit button invisible */
-  .cellSubmit {
-    display: none;
-  }
   
   input[type=number] {
     -moz-appearance: textfield;
@@ -56,6 +51,10 @@ body {
     background: #ccc;
   }
   
+  .hintCell {
+    background: #ccc;
+  }
+
   .kbd-navigation .cell:focus {
     background: #ddd;
   }

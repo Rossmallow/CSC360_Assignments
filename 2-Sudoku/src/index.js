@@ -23,10 +23,12 @@ function Cell(props) {
     return (
         <input
             type="text"
+            id={"cell" + props.index}
             className={props.className}
             maxLength="1"
-            onClick={props.onClick}
-            value={props.value}>
+            defaultValue={props.defaultValue}
+            onChange={() => props.prop.onChange(props.index, document.getElementById("cell" + props.index).value)}
+        >
         </input>
     );
 }
@@ -37,16 +39,16 @@ class Board extends React.Component {
         if (PUZZLE[i] !== null) {
             cName += " hintCell";
         }
-        if ((i >= 9 * 0 && i < 9 * 1) || (i >= 9 * 3 && i < 9 * 4) || (i >= 9 * 6 && i < 9 * 7)) {
+        if ((i >= 0 && i < 9) || (i >= 27 && i < 36) || (i >= 54 && i < 63)) {
             cName += " top";
         }
-        if (i >= 9 * 8 && i < 9 * 9) {
+        if (i >= 72 && i < 81) {
             cName += " bottom";
         }
-        if (i % 3 == 0) {
+        if (i % 3 === 0) {
             cName += " left";
         }
-        if ((i + 1) % 9 == 0) {
+        if ((i + 1) % 9 === 0) {
             cName += " right";
         }
         return cName;
@@ -55,9 +57,10 @@ class Board extends React.Component {
     renderCell(i) {
         return (
             <Cell
+                prop={this.props}
+                index={i}
                 className={this.getClassName(i)}
-                value={this.props.cells[i]}
-                onClick={() => this.props.onClick(i)}
+                defaultValue={this.props.cells[i]}
             />
         );
     }
@@ -180,22 +183,38 @@ class Game extends React.Component {
         };
     }
 
-    handleClick(i) {
+    handleInput(i, val) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const cells = current.cells.slice();
-        if (calculateWinner(cells) || (cells[i] && cells[i] == PUZZLE[i])) {
+
+        if (calculateWinner(cells) || (cells[i] && cells[i] === PUZZLE[i])) {
+            document.getElementById("cell" + i).value = cells[i];
             return;
         }
-        cells[i] = i;
-        this.setState({
-            history: history.concat([
-                {
-                    cells: cells
-                }
-            ]),
-            stepNumber: history.length,
-        });
+
+        if ((!isNaN(Number(val)) && Number(val) !== 0) || val === "") {
+            if (val === "") {
+                cells[i] = null;
+                document.getElementById("cell" + i).value = "";
+            } else {
+                cells[i] = Number(val);
+                document.getElementById("cell" + i).value = cells[i];
+            }
+
+            this.setState({
+                history: history.concat([
+                    {
+                        cells: cells
+                    }
+                ]),
+                stepNumber: history.length,
+            });
+
+        } else {
+            cells[i] = null;
+            document.getElementById("cell" + i).value = "";
+        }
     }
 
     solveMost() {
@@ -207,9 +226,11 @@ class Game extends React.Component {
         for (let i = 0; i < SOLUTION.length; i++) {
             if (count && PUZZLE[i] == null) {
                 cells[i] = null;
+                document.getElementById("cell" + i).value = "";
                 count--;
             } else {
                 cells[i] = SOLUTION[i];
+                document.getElementById("cell" + i).value = cells[i];
             }
         }
         this.setState({
@@ -226,6 +247,18 @@ class Game extends React.Component {
         this.setState({
             stepNumber: step,
         });
+        const history = this.state.history.slice(0, step + 1);
+        const current = history[history.length - 1];
+        const cells = current.cells.slice();
+        console.log(cells);
+
+        for (let i = 0; i < cells.length; i++) {
+            if (cells[i] == null) {
+                document.getElementById("cell" + i).value = "";
+            } else {
+                document.getElementById("cell" + i).value = cells[i];
+            }
+        }
     }
 
     render() {
@@ -238,7 +271,7 @@ class Game extends React.Component {
             const desc = move ?
                 'Go to move #' + move :
                 'Go to game start';
-            const cur = currentMove == move ?
+            const cur = currentMove === move ?
                 ' (current)' :
                 '';
             return (
@@ -262,7 +295,7 @@ class Game extends React.Component {
                 <table className="game-board">
                     <Board
                         cells={current.cells}
-                        onClick={(i) => this.handleClick(i)}
+                        onChange={(i, val) => this.handleInput(i, val)}
                     />
                 </table>
                 <div className="game-info">

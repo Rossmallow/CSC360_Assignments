@@ -217,7 +217,7 @@ class Game extends React.Component {
         }
     }
 
-    solveMost() {
+    cheat() {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const cells = current.cells.slice();
@@ -226,10 +226,11 @@ class Game extends React.Component {
         for (let i = 0; i < SOLUTION.length; i++) {
             if (count && PUZZLE[i] == null) {
                 cells[i] = null;
-                document.getElementById("cell" + i).value = "";
+                document.getElementById("cell" + i).placeholder = SOLUTION[i];
                 count--;
             } else {
                 cells[i] = SOLUTION[i];
+                document.getElementById("cell" + i).placeholder = cells[i];
                 document.getElementById("cell" + i).value = cells[i];
             }
         }
@@ -254,8 +255,10 @@ class Game extends React.Component {
 
         for (let i = 0; i < cells.length; i++) {
             if (cells[i] == null) {
+                document.getElementById("cell" + i).placeholder = "";
                 document.getElementById("cell" + i).value = "";
             } else {
+                document.getElementById("cell" + i).placeholder = cells[i];
                 document.getElementById("cell" + i).value = cells[i];
             }
         }
@@ -285,7 +288,7 @@ class Game extends React.Component {
         if (winner) {
             status = winner;
         } else {
-            status = <div><button className="solve" onClick={() => this.solveMost()}>Solve most of the Puzzle
+            status = <div><button className="solve" onClick={() => this.cheat()}>Cheat
                           </button><br></br>Not Solved...
                     </div>
         }
@@ -315,10 +318,17 @@ ReactDOM.render(
 );
 
 function calculateWinner(cells) {
+    const boxes = document.getElementsByClassName('cell');
     for (let i = 0; i < cells.length; i++) {
         if (cells[i] !== SOLUTION[i]) {
+            for (let i = 0; i < boxes.length; i++) {
+                boxes[i].classList.remove("win");
+            }
             return null;
         }
+    }
+    for (let i = 0; i < boxes.length; i++) {
+        boxes[i].classList.add("win");
     }
     return "You win!";
 }

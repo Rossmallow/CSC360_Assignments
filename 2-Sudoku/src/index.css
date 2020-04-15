@@ -3,6 +3,16 @@ body {
     margin: 20px;
   }
   
+  .wrapper{
+    width: 100%;
+    margin: 1.5em;
+    margin-left: auto;
+    min-height: calc(100vh - 5em);
+
+    display: flex;
+    flex-direction: column;
+}
+
   ol, ul {
     padding-left: 30px;
   }
@@ -32,6 +42,19 @@ body {
     border: 1px solid #999;
   }
   
+  ::placeholder {
+    color: #eee;
+    opacity: 1; /* Firefox */
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #eee;
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+   color: #eee;
+  }
+
   .cell:focus {
     outline: none;
   }
@@ -67,6 +90,10 @@ body {
     border-right: 3px solid #000;
   }
 
+  .win {
+    color: green;
+  }
+
   .kbd-navigation .cell:focus {
     background: #ddd;
   }
@@ -79,4 +106,15 @@ body {
   .game-info {
     margin-left: 20px;
   }
+
+  footer {
+    display: flex;
+    flex-direction: column;
+
+    text-align: center;
+    justify-content: center;
+    margin-top: -1.5em;
+    height: 2em;
+}
+
   

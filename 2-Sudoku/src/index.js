@@ -3,13 +3,31 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { makepuzzle, solvepuzzle } from "sudoku";
 
-const PUZZLE = makepuzzle();
-const SOLUTION = solvepuzzle(PUZZLE);
+function AddOne(puzzle) {
+    for (let i = 0; i < puzzle.length; i++) {
+        if (puzzle[i] !== null) {
+            puzzle[i] = puzzle[i] + 1;
+        }
+    }
+    return puzzle;
+}
+
+let PUZZLE = makepuzzle();
+let SOLUTION = solvepuzzle(PUZZLE);
+
+PUZZLE = AddOne(PUZZLE);
+SOLUTION = AddOne(SOLUTION);
+
 
 function Cell(props) {
     return (
-        <input type="number" className="cell" min="0" max="8" maxLength="1" value={props.value}/*onClick={props.onClick}*/>
-        </input>
+        <text
+            className="cell"
+            min="0" max="8"
+            maxLength="1"
+            onClick={props.onClick}>
+            {props.value}
+        </text>
     );
 }
 
@@ -145,7 +163,7 @@ class Game extends React.Component {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const cells = current.cells.slice();
-        if (calculateWinner(cells) || cells[i]) {
+        if (calculateWinner(cells) || (cells[i] && cells[i] == PUZZLE[i])) {
             return;
         }
         cells[i] = i;
@@ -163,12 +181,10 @@ class Game extends React.Component {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const cells = current.cells.slice();
-        const solution = solvepuzzle(history[0].cells);
 
         cells[0] = null;
-        for (let i = 1; i < solution.length; i++) {
-            console.log(solution.length);
-            cells[i] = solution[i];
+        for (let i = 1; i < SOLUTION.length; i++) {
+            cells[i] = SOLUTION[i];
         }
         this.setState({
             history: history.concat([

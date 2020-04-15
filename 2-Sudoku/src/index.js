@@ -21,13 +21,13 @@ SOLUTION = AddOne(SOLUTION);
 
 function Cell(props) {
     return (
-        <text
+        <input
+            type="text"
             className={props.className}
-            min="0" max="8"
             maxLength="1"
-            onClick={props.onClick}>
-            {props.value}
-        </text>
+            onClick={props.onClick}
+            value={props.value}>
+        </input>
     );
 }
 
@@ -36,6 +36,18 @@ class Board extends React.Component {
         let cName = "cell";
         if (PUZZLE[i] !== null) {
             cName += " hintCell";
+        }
+        if ((i >= 9 * 0 && i < 9 * 1) || (i >= 9 * 3 && i < 9 * 4) || (i >= 9 * 6 && i < 9 * 7)) {
+            cName += " top";
+        }
+        if (i >= 9 * 8 && i < 9 * 9) {
+            cName += " bottom";
+        }
+        if (i % 3 == 0) {
+            cName += " left";
+        }
+        if ((i + 1) % 9 == 0) {
+            cName += " right";
         }
         return cName;
     }

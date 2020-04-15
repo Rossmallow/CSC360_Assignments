@@ -191,9 +191,14 @@ class Game extends React.Component {
         const current = history[history.length - 1];
         const cells = current.cells.slice();
 
-        cells[0] = null;
-        for (let i = 1; i < SOLUTION.length; i++) {
-            cells[i] = SOLUTION[i];
+        let count = 1;
+        for (let i = 0; i < SOLUTION.length; i++) {
+            if (count && PUZZLE[i] == null) {
+                cells[i] = null;
+                count--;
+            } else {
+                cells[i] = SOLUTION[i];
+            }
         }
         this.setState({
             history: history.concat([

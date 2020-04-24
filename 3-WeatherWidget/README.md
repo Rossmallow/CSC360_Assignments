@@ -1,3 +1,5 @@
+## To use project
+
 To use this project, get a free API Key from [openweathermap.org](https://openweathermap.org).
 
 Then, create a file called 'key.js' in the src directory and populate it

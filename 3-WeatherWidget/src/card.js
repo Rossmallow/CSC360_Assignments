@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import './index.css';
 import { APIKEY } from './key.js';
 import fetchWeather from './api.js';
@@ -7,12 +6,9 @@ import moment from 'moment';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { ToggleButtonGroup, ToggleButton, Skeleton } from '@material-ui/lab/';
 import {
-    Card, CardActions, CardContent, CardHeader, CircularProgress, Icon,
+    Card, CardActions, CardContent, CardHeader, CircularProgress, Fade, Icon,
     IconButton, makeStyles, Typography
 } from '@material-ui/core';
-
-let UNITS = 'imperial';
-const ZIP = '60654';
 
 const useStyles = makeStyles({
     root: {
@@ -27,31 +23,36 @@ const useStyles = makeStyles({
     }
 });
 
-function getURL(units, zip = ZIP) {
-    return 'https://api.openweathermap.org/data/2.5/forecast?'
-        + 'zip=' + zip + '&units=' + units + '&APPID=' + APIKEY;
-}
-
 export default function WeatherCard() {
     const classes = useStyles();
+
+    const [loading, setLoading] = useState(false);
 
     const [time, setTime] = useState("--");
     const [temp, setTemp] = useState("--");
     const [icon, setIcon] = useState("--");
     const [desc, setDesc] = useState("--");
 
+    const [units, setUnits] = useState("imperial");
+    const [zip, setZip] = useState("60654");
+
+    const getURL = () => {
+        return 'https://api.openweathermap.org/data/2.5/forecast?'
+            + 'zip=' + zip + '&units=' + units + '&APPID=' + APIKEY;
+    }
+
     const getWeather = (message = "") => {
         if (message !== "") {
             console.log(message);
         }
-        console.log(getURL(UNITS));
 
+        setLoading(true);
         setTime("--");
         setTemp("--");
         setIcon("--");
         setDesc("--");
 
-        fetchWeather(getURL(UNITS))
+        fetchWeather(getURL())
             .then((json) => {
                 // console.dir(json);
                 const data = json.list[0];
@@ -62,6 +63,7 @@ export default function WeatherCard() {
                 setTemp(data.main.temp);
                 setIcon(data.weather[0].icon);
                 setDesc(data.weather[0].description);
+                setLoading(false);
             })
             .catch(err => {
                 setTime("Could not retrieve");
@@ -73,10 +75,12 @@ export default function WeatherCard() {
     }
 
     const handleUnit = (event, newUnits) => {
+        console.log(units);
         if (newUnits !== null) {
-            UNITS = newUnits;
-            console.log("UNITS: " + UNITS)
-            getWeather("HANDLE UNIT");
+            console.log("New Units: " + newUnits);
+            setUnits(newUnits);
+            console.log("CHANGED UNITS TO: " + units);
+            getWeather("FETCH FROM HANDLE UNIT");
         }
     };
 
@@ -90,12 +94,20 @@ export default function WeatherCard() {
             )
         } else {
             return (
-                <Skeleton
-                    variant="circle"
-                    width={30}
-                    height={30}
-                    animation="pulse"
-                />
+                <Fade
+                    in={loading}
+                    style={{
+                        transitionDelay: loading ? '800ms' : '0ms',
+                    }}
+                    unmountOnExit
+                >
+                    <Skeleton
+                        variant="circle"
+                        width={30}
+                        height={30}
+                        animation="pulse"
+                    />
+                </Fade>
             )
         }
     }
@@ -105,30 +117,49 @@ export default function WeatherCard() {
             return time
         } else {
             return (
-                <Skeleton
-                    variant="text"
-                    width={250}
-                    animation="wave"
-                />
+                <Fade
+                    in={loading}
+                    style={{
+                        transitionDelay: loading ? '800ms' : '0ms',
+                    }}
+                    unmountOnExit
+                >
+                    <Skeleton
+                        variant="text"
+                        width={250}
+                        animation="wave"
+                    />
+                </Fade>
             )
         }
     }
 
     const getTemp = () => {
-        if (temp != "--") {
+        if (!loading) {
             return (
-                <Typography aria-label="temperature" variant="h1" component="h1">
+                <Typography aria-label="temperature" variant="h1" component="h2">
                     {temp}&#176;
                 </Typography>
             )
         } else {
-            return <CircularProgress color="inherit" />
+            return (
+                <Fade
+                    in={loading}
+                    style={{
+                        transitionDelay: loading ? '800ms' : '0ms',
+                    }}
+                    unmountOnExit
+                >
+                    <CircularProgress color="inherit" />
+                </Fade>
+            )
         }
     }
 
-    useEffect(() => {
-        getWeather("WEATHERCARD");
-    }, []);
+    useEffect(
+        () => {
+            getWeather("FETCH FROM PAGE LOAD")
+        }, []);
 
     return (
         <Card className={classes.root}>
@@ -139,7 +170,7 @@ export default function WeatherCard() {
                 action={
                     <IconButton
                         aria-label="refresh"
-                        onClick={() => { getWeather("REFRESH") }}
+                        onClick={() => { getWeather("FETCH FROM RELOAD") }}
                     >
                         <RefreshIcon />
                     </IconButton>
@@ -152,17 +183,17 @@ export default function WeatherCard() {
             </CardContent>
             <CardActions>
                 <ToggleButtonGroup
-                    value={UNITS}
+                    value={units}
                     exclusive
                     onChange={handleUnit}
-                    aria-label=""
+                    aria-label="Toggle Box"
                 >
                     <ToggleButton value="imperial" aria-label="fahrenheit">
                         &#8457;
-                        </ToggleButton>
+                    </ToggleButton>
                     <ToggleButton value="metric" aria-label="celsius">
                         &#8451;
-                        </ToggleButton>
+                    </ToggleButton>
                 </ToggleButtonGroup>
             </CardActions>
         </Card>

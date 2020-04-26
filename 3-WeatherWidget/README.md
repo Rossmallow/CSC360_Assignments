@@ -3,11 +3,10 @@
 To use this project, get a free API Key from [openweathermap.org](https://openweathermap.org).
 
 Then, create a file called 'key.js' in the src directory and populate it
-with the following code, where `1111111111` is your API key.
+with the following line of code, where `1111111111` is your API key.
 
 ```javascript
-const APIKEY = '1111111111';
-export { APIKEY };
+export const APIKEY = '1111111111';
 ```
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

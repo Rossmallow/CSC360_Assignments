@@ -5,10 +5,10 @@ import { APIKEY } from './key.js';
 import fetchWeather from './api.js';
 import moment from 'moment';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab/';
+import { ToggleButtonGroup, ToggleButton, Skeleton } from '@material-ui/lab/';
 import {
-    Card, CardHeader, CardActions, CardContent, IconButton, Typography,
-    makeStyles, Icon, Backdrop
+    Card, CardActions, CardContent, CardHeader, CircularProgress, Icon,
+    IconButton, makeStyles, Typography
 } from '@material-ui/core';
 
 let UNITS = 'imperial';
@@ -16,7 +16,8 @@ const ZIP = '60654';
 
 const useStyles = makeStyles({
     root: {
-        maxWidth: 450
+        width: 450,
+        height: 300
     },
     title: {
         fontSize: 14
@@ -44,13 +45,20 @@ export default function WeatherCard() {
             console.log(message);
         }
         console.log(getURL(UNITS));
+
+        setTime("--");
+        setTemp("--");
+        setIcon("--");
+        setDesc("--");
+
         fetchWeather(getURL(UNITS))
             .then((json) => {
                 // console.dir(json);
                 const data = json.list[0];
                 let d = new Date();
                 console.dir(data);
-                setTime(moment(data.dt_txt).format('dddd, MMMM Do YYYY, h:mm:ss a'));
+                setTime(moment(data.dt_txt)
+                    .format('dddd, MMMM Do YYYY, h:mm:ss a'));
                 setTemp(data.main.temp);
                 setIcon(data.weather[0].icon);
                 setDesc(data.weather[0].description);
@@ -72,33 +80,75 @@ export default function WeatherCard() {
         }
     };
 
-    const weatherIconSrc = 'https://openweathermap.org/img/wn/' + icon + '.png';
-
-    getWeather("WEATHERCARD");
-
-    if (temp === "") {
-        return <p>LOADING...</p>
+    const getIcon = () => {
+        if (icon !== "--" && desc !== "--") {
+            let iconSrc = 'https://openweathermap.org/img/wn/' + icon + '.png';
+            return (
+                <Icon aria-label={desc}>
+                    <img src={iconSrc} alt={desc} />
+                </Icon>
+            )
+        } else {
+            return (
+                <Skeleton
+                    variant="circle"
+                    width={30}
+                    height={30}
+                    animation="pulse"
+                />
+            )
+        }
     }
+
+    const getTime = () => {
+        if (time !== "--") {
+            return time
+        } else {
+            return (
+                <Skeleton
+                    variant="text"
+                    width={250}
+                    animation="wave"
+                />
+            )
+        }
+    }
+
+    const getTemp = () => {
+        if (temp != "--") {
+            return (
+                <Typography aria-label="temperature" variant="h1" component="h1">
+                    {temp}&#176;
+                </Typography>
+            )
+        } else {
+            return <CircularProgress color="inherit" />
+        }
+    }
+
+    useEffect(() => {
+        getWeather("WEATHERCARD");
+    }, []);
+
     return (
         <Card className={classes.root}>
             <CardHeader
                 avatar={
-                    <Icon aria-label={desc}>
-                        <img src={weatherIconSrc} alt={desc} />
-                    </Icon>
+                    getIcon()
                 }
                 action={
-                    <IconButton aria-label="refresh" onClick={() => { getWeather("REFRESH") }}>
+                    <IconButton
+                        aria-label="refresh"
+                        onClick={() => { getWeather("REFRESH") }}
+                    >
                         <RefreshIcon />
                     </IconButton>
                 }
                 title="Weather"
-                subheader={time}
+                subheader={getTime()}
             />
             <CardContent>
-                <Typography aria-label="temperature" variant="h1" component="h1">
-                    {temp}&#176;
-                </Typography>
+                {getTemp()}
             </CardContent>
             <CardActions>
                 <ToggleButtonGroup
@@ -118,115 +168,3 @@ export default function WeatherCard() {
         </Card>
     );
 }
-
-
-
-// class Card extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             temp: "--",
-//             icon: "--",
-//             alt: "--"
-//         }
-//     }
-
-//     componentDidMount() {
-//         console.log(getURL(UNITS));
-//         fetchWeather(getURL(UNITS))
-//             .then((json) => {
-//                 // console.dir(json);
-//                 const data = json.list[0];
-//                 console.dir(data);
-//                 this.setState({
-//                     time: moment(data.dt_txt).format('dddd, MMMM Do YYYY, h:mm:ss a'),
-//                     temp: data.main.temp,
-//                     icon: data.weather[0].icon,
-//                     description: data.weather[0].description
-//                 })
-//             })
-//             .catch(err => {
-//                 this.setState({
-//                     tempStr: "Could not retrieve"
-//                 })
-//                 console.error("Weather request failed", err);
-//             });
-//     }
-
-//     getHeader() {
-
-//         const imageSrc = 'https://openweathermap.org/img/wn/'
-//             + this.state.icon + '@2x.png';
-
-//         console.log("temp: " + this.state.temp
-//             + "\n" + "icon: " + this.state.icon
-//             + "\n" + "description: " + this.state.description);
-
-//         return (
-//             <section className="header">
-//                 <img src={imageSrc} alt={this.state.description} />
-//                 Weather
-//                 {this.state.time}
-//                 <button><RefreshIcon aria-label="refresh" aria-hidden="false"
-//                     onClick={() => this.componentDidMount()}
-//                 /></button>
-//             </section>
-//         );
-//     }
-
-//     getContent() {
-//         let ariaLabel = this.state.temp + ' Degrees'
-
-//         return (
-//             <section className="content">
-//                 <h1 aria-label='ariaLabel'>{this.state.temp}&#176;</h1>
-//             </section>
-//         );
-//     }
-
-//     getActions() {
-//         const handleUnit = (event, newUnits) => {
-//             if (newUnits !== null) {
-//                 UNITS = newUnits;
-//                 console.log("UNITS: " + UNITS)
-//                 this.componentDidMount();
-//             }
-//         };
-
-//         let ariaLabel = "Toggle units. " + { UNITS } + " units selected."
-
-//         return (
-//             <section className="actions">
-//                 <div className="toggleContainer">
-//                     <ToggleButtonGroup
-//                         value={UNITS}
-//                         exclusive
-//                         onChange={handleUnit}
-//                         aria-label={ariaLabel}
-//                     >
-//                         <ToggleButton value="imperial" aria-label="fahrenheit">
-//                             &#8457;
-//                         </ToggleButton>
-//                         <ToggleButton value="metric" aria-label="celsius">
-//                             &#8451;
-//                         </ToggleButton>
-//                     </ToggleButtonGroup>
-//                 </div>
-//             </section >
-//         );
-//     }
-
-//     render() {
-//         let header = this.getHeader();
-//         let content = this.getContent();
-//         let actions = this.getActions();
-
-//         return (
-//             <section className="card">
-//                 {header}
-//                 {content}
-//                 {actions}
-//             </section>
-//         );
-//     }
-// }

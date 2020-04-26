@@ -8,7 +8,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab/';
 
 let UNITS = 'imperial';
-let ZIP = '60654';
+const ZIP = '60654';
 
 class Card extends React.Component {
     constructor(props) {
@@ -21,14 +21,14 @@ class Card extends React.Component {
     }
 
     componentDidMount() {
-        console.log(getURL(UNITS, ZIP));
-        fetchWeather(getURL(UNITS, ZIP))
+        console.log(getURL(UNITS));
+        fetchWeather(getURL(UNITS))
             .then((json) => {
                 // console.dir(json);
                 const data = json.list[0];
                 console.dir(data);
                 this.setState({
-                    time: moment().format('dddd, MMMM Do YYYY, h:mm:ss a'),
+                    time: moment(data.dt_txt).format('dddd, MMMM Do YYYY, h:mm:ss a'),
                     temp: data.main.temp,
                     icon: data.weather[0].icon,
                     description: data.weather[0].description
@@ -56,15 +56,19 @@ class Card extends React.Component {
                 <img src={imageSrc} alt={this.state.description} />
                 Weather
                 {this.state.time}
-                <RefreshIcon onClick={() => this.componentDidMount()} />
+                <button><RefreshIcon aria-label="refresh" aria-hidden="false"
+                    onClick={() => this.componentDidMount()}
+                /></button>
             </section>
         );
     }
 
     getContent() {
+        let ariaLabel = this.state.temp + ' Degrees'
+
         return (
             <section className="content">
-                <h1>{this.state.temp}&#176;</h1>
+                <h1 aria-label='ariaLabel'>{this.state.temp}&#176;</h1>
             </section>
         );
     }
@@ -78,24 +82,26 @@ class Card extends React.Component {
             }
         };
 
+        let ariaLabel = "Toggle units. " + { UNITS } + " units selected."
+
         return (
             <section className="actions">
-                <div className="{classes.toggleContainer}">
+                <div className="toggleContainer">
                     <ToggleButtonGroup
                         value={UNITS}
                         exclusive
                         onChange={handleUnit}
-                        aria-label="temperature units"
+                        aria-label={ariaLabel}
                     >
-                        <ToggleButton value="imperial" aria-label="imperial">
-                            F&#176;
+                        <ToggleButton value="imperial" aria-label="fahrenheit">
+                            &#8457;
                         </ToggleButton>
-                        <ToggleButton value="metric" aria-label="metric">
-                            C&#176;
+                        <ToggleButton value="metric" aria-label="celsius">
+                            &#8451;
                         </ToggleButton>
                     </ToggleButtonGroup>
                 </div>
-            </section>
+            </section >
         );
     }
 
@@ -119,7 +125,7 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-function getURL(units, zip) {
+function getURL(units, zip = ZIP) {
     return 'https://api.openweathermap.org/data/2.5/forecast?'
         + 'zip=' + zip + '&units=' + units + '&APPID=' + APIKEY;
 }

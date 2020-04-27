@@ -10,7 +10,7 @@ import moment from 'moment';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { ToggleButtonGroup, ToggleButton, Skeleton } from '@material-ui/lab/';
 import {
-    Card, CardActions, CardContent, CardHeader, CircularProgress, Fade, Icon,
+    Card, CardActions, CardContent, CardHeader, CircularProgress, Fade,
     IconButton, makeStyles, Typography
 } from '@material-ui/core';
 

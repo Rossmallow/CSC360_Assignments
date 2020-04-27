@@ -36,6 +36,7 @@ export default function WeatherCard() {
 
     const getURL = () => {
         return 'https://api.openweathermap.org/data/2.5/forecast?'
+            // eslint-disable-next-line
             + 'zip=' + "60654" + '&units=' + units + '&APPID=' + APIKEY;
     }
 
@@ -50,11 +51,12 @@ export default function WeatherCard() {
         setIcon("--");
         setDesc("--");
 
+
+        console.log(getURL());
         fetchWeather(getURL())
             .then((json) => {
                 // console.dir(json);
                 const data = json.list[0];
-                let d = new Date();
                 console.dir(data);
                 setTime(moment(data.dt_txt)
                     .format('dddd, MMMM Do YYYY, h:mm:ss a'));
@@ -73,13 +75,8 @@ export default function WeatherCard() {
     }
 
     const handleUnit = (event, newUnits) => {
-        console.log(units);
-        let temp = newUnits;
         if (newUnits !== null) {
-            console.log("New Units: " + temp);
-            setUnits(temp);
-            console.log("CHANGED UNITS TO: " + units);
-            getWeather("FETCH FROM HANDLE UNIT");
+            setUnits(newUnits);
         }
     };
 
@@ -157,7 +154,8 @@ export default function WeatherCard() {
 
     useEffect(() => {
         getWeather("FETCH FROM PAGE LOAD")
-    }, []);
+        // eslint-disable-next-line
+    }, [units, setUnits]);
 
     return (
         <Card className={classes.root}>
@@ -184,7 +182,7 @@ export default function WeatherCard() {
                     value={units}
                     exclusive
                     onChange={handleUnit}
-                    aria-label="Toggle Box"
+                    aria-label="toggle between fahrenheit and celsius"
                 >
                     <ToggleButton value="imperial" aria-label="fahrenheit">
                         &#8457;

@@ -1,3 +1,7 @@
+/* src/card.js */
+/* Ross Nelson Assignment 3: Weather Widget */
+/* April 28th, 2020 */
+
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import { APIKEY } from './key.js';

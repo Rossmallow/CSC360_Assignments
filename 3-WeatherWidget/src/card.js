@@ -27,18 +27,16 @@ export default function WeatherCard() {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
+    const [units, setUnits] = useState("imperial");
 
     const [time, setTime] = useState("--");
     const [temp, setTemp] = useState("--");
     const [icon, setIcon] = useState("--");
     const [desc, setDesc] = useState("--");
 
-    const [units, setUnits] = useState("imperial");
-    const [zip, setZip] = useState("60654");
-
     const getURL = () => {
         return 'https://api.openweathermap.org/data/2.5/forecast?'
-            + 'zip=' + zip + '&units=' + units + '&APPID=' + APIKEY;
+            + 'zip=' + "60654" + '&units=' + units + '&APPID=' + APIKEY;
     }
 
     const getWeather = (message = "") => {
@@ -76,9 +74,10 @@ export default function WeatherCard() {
 
     const handleUnit = (event, newUnits) => {
         console.log(units);
+        let temp = newUnits;
         if (newUnits !== null) {
-            console.log("New Units: " + newUnits);
-            setUnits(newUnits);
+            console.log("New Units: " + temp);
+            setUnits(temp);
             console.log("CHANGED UNITS TO: " + units);
             getWeather("FETCH FROM HANDLE UNIT");
         }
@@ -156,10 +155,9 @@ export default function WeatherCard() {
         }
     }
 
-    useEffect(
-        () => {
-            getWeather("FETCH FROM PAGE LOAD")
-        }, []);
+    useEffect(() => {
+        getWeather("FETCH FROM PAGE LOAD")
+    }, []);
 
     return (
         <Card className={classes.root}>

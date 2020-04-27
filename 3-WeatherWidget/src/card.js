@@ -143,7 +143,7 @@ export default function WeatherCard() {
             let ariaLabel = "The current temperature is " + temp + " degrees "
                 + (units === "imperial" ? "fahrenheit" : "celsius");
             return (
-                <Typography aria-label={ariaLabel} variant="h1" component="h2">
+                <Typography aria-label={ariaLabel} variant="h1" component="h1">
                     {temp}&#176;
                 </Typography>
             )

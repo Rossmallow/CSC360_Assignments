@@ -83,10 +83,9 @@ export default function WeatherCard() {
     const getIcon = () => {
         if (icon !== "--" && desc !== "--") {
             let iconSrc = 'https://openweathermap.org/img/wn/' + icon + '.png';
+            let ariaLabel = "The current forcast is " + desc;
             return (
-                <Icon aria-label={desc}>
-                    <img src={iconSrc} alt={desc} />
-                </Icon>
+                <img src={iconSrc} alt={ariaLabel} aria-label={ariaLabel} />
             )
         } else {
             return (
@@ -109,8 +108,9 @@ export default function WeatherCard() {
     }
 
     const getTime = () => {
-        if (time !== "--") {
-            return time
+        if (!loading) {
+            let ariaLabel = "The temperature was last fetched on " + time;
+            return <date aria-label={ariaLabel}>{time}</date>
         } else {
             return (
                 <Fade
@@ -132,8 +132,10 @@ export default function WeatherCard() {
 
     const getTemp = () => {
         if (!loading) {
+            let ariaLabel = "The current temperature is " + temp + " degrees "
+                + (units === "imperial" ? "fahrenheit" : "celsius");
             return (
-                <Typography aria-label="temperature" variant="h1" component="h2">
+                <Typography aria-label={ariaLabel} variant="h1" component="h2">
                     {temp}&#176;
                 </Typography>
             )

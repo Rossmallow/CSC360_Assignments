@@ -23,6 +23,8 @@ const useStyles = makeStyles({
     }
 });
 
+
+// Returns HTML for the page depending on the data returned from the API
 export default function WeatherCard() {
     const classes = useStyles();
 
@@ -34,12 +36,15 @@ export default function WeatherCard() {
     const [icon, setIcon] = useState("--");
     const [desc, setDesc] = useState("--");
 
+    // Returns a url to fetch the temperature with the appropriate units.
     const getURL = () => {
         return 'https://api.openweathermap.org/data/2.5/forecast?'
             // eslint-disable-next-line
             + 'zip=' + "60654" + '&units=' + units + '&APPID=' + APIKEY;
     }
 
+    // Takes an optional message to be logged to the console
+    // Sets hooks to the appropriate value based on the API data
     const getWeather = (message = "") => {
         if (message !== "") {
             console.log(message);
@@ -51,11 +56,8 @@ export default function WeatherCard() {
         setIcon("--");
         setDesc("--");
 
-
-        console.log(getURL());
         fetchWeather(getURL())
             .then((json) => {
-                // console.dir(json);
                 const data = json.list[0];
                 console.dir(data);
                 setTime(moment(data.dt_txt)
@@ -74,14 +76,16 @@ export default function WeatherCard() {
             });
     }
 
+    // Toggles the value of 'units' if a new value is passed
     const handleUnit = (event, newUnits) => {
         if (newUnits !== null) {
             setUnits(newUnits);
         }
     };
 
+    //  Returns an icon if 'loading' is false, else, returns a skeleton
     const getIcon = () => {
-        if (icon !== "--" && desc !== "--") {
+        if (!loading) {
             let iconSrc = 'https://openweathermap.org/img/wn/' + icon + '.png';
             let ariaLabel = "The current forcast is " + desc;
             return (
@@ -101,16 +105,18 @@ export default function WeatherCard() {
                         width={30}
                         height={30}
                         animation="pulse"
+                        className="iconSkeleton"
                     />
                 </Fade>
             )
         }
     }
 
+    // Returns the date if 'loading' is false, else, returns a skeleton
     const getTime = () => {
         if (!loading) {
-            let ariaLabel = "The temperature was last fetched on " + time;
-            return <date aria-label={ariaLabel}>{time}</date>
+            let ariaLabel = "The temperature was last updated on " + time;
+            return <time aria-label={ariaLabel}>{time}</time>
         } else {
             return (
                 <Fade
@@ -124,12 +130,14 @@ export default function WeatherCard() {
                         variant="text"
                         width={250}
                         animation="wave"
+                        className="timeSkeleton"
                     />
                 </Fade>
             )
         }
     }
 
+    // Returns the temperature if 'loading' is false, else, returns a loading icon
     const getTemp = () => {
         if (!loading) {
             let ariaLabel = "The current temperature is " + temp + " degrees "
@@ -148,7 +156,7 @@ export default function WeatherCard() {
                     }}
                     unmountOnExit
                 >
-                    <CircularProgress color="inherit" />
+                    <CircularProgress color="inherit" className="tempProgress" />
                 </Fade>
             )
         }
@@ -167,7 +175,7 @@ export default function WeatherCard() {
                 }
                 action={
                     <IconButton
-                        aria-label="refresh"
+                        aria-label="fetch weather"
                         onClick={() => { getWeather("FETCH FROM RELOAD") }}
                     >
                         <RefreshIcon />
@@ -176,7 +184,7 @@ export default function WeatherCard() {
                 title="Weather"
                 subheader={getTime()}
             />
-            <CardContent>
+            <CardContent className="content">
                 {getTemp()}
             </CardContent>
             <CardActions>

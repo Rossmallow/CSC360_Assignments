@@ -17,6 +17,22 @@ body {
     background-color: white;
 }
 
+.iconSkeleton {
+    margin: .64em;
+}
+
+.timeSkeleton {
+    margin-top: -5em;
+}
+
+.content {
+    text-align: center;
+}
+
+.tempProgress {
+    margin-bottom: 4.5em;
+}
+
 footer {
     display: flex;
     flex-direction: column;

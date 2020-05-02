@@ -1,0 +1,23 @@
+/* css/stylesheet.css */
+/* Ross Nelson Assignment 4: Visualization */
+/* May 5th, 2020 */
+
+.wrapper{
+    width: 100%;
+    margin: 1.5em;
+    margin-left: auto;
+    min-height: calc(100vh - 5em);
+
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+
+    text-align: center;
+    justify-content: center;
+    margin-top: -1em;
+    height: 2em;
+}

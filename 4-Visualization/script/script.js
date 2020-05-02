@@ -2,21 +2,43 @@
 /* Ross Nelson Assignment 4: Visualization */
 /* May 5th, 2020 */
 
-function getData(URL) {
+function fetchData(URL) {
     return fetch(URL)
         .then((response) => {
             console.dir(response);
             return response.json();
         })
+
+}
+
+function getData(URL) {
+    let years = []
+    let total = []
+    let rail = []
+    let bus = []
+    let paratransit = []
+
+    fetchData(URL)
+        .then((json) => {
+            console.log(json)
+            json.map(obj => {
+                years.push(obj.year);
+                total.push(obj.total);
+                rail.push(obj.rail);
+                bus.push(obj.bus);
+                paratransit.push(obj.paratransit);
+            })
+        });
+
+    return [years, total, rail, bus, paratransit];
 }
 
 function getYears() {
-    getData('https://data.cityofchicago.org/resource/w8km-9pzd')
-        .then((json) => {
-            const list = json.list[0];
-            console.log(list)
-        });
-    return ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    let ALL = getData('https://data.cityofchicago.org/resource/w8km-9pzd');
+    console.log(ALL);
+    console.log(ALL[0]);
+    console.log(ALL[0][0]);
+    return ["January", "February", "March", "April", "May", "June", "July"];
 }
 
 let ctx = document.getElementById('myChart').getContext('2d');

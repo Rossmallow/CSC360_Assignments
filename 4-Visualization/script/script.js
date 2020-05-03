@@ -5,7 +5,7 @@
 function fetchData(URL) {
     return fetch(URL)
         .then((response) => {
-            console.dir(response);
+            // console.dir(response);
             return response.json();
         })
 
@@ -28,6 +28,13 @@ function getData(URL) {
                 bus.push(obj.bus);
                 paratransit.push(obj.paratransit);
             })
+        })
+        .catch(err => {
+            years = ["Could not retrieve"];
+            total = [0];
+            rail = [0];
+            bus = [0];
+            paratransit = [0];
         });
 
     return [years, total, rail, bus, paratransit];

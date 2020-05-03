@@ -2,22 +2,26 @@
 /* Ross Nelson Assignment 4: Visualization */
 /* May 5th, 2020 */
 
-let ALL = [[], [], [], [], []];
+const URL = 'https://data.cityofchicago.org/resource/w8km-9pzd'; // API
+let ALL = [[], [], [], [], []]; /* 2D array to hold values
+                                   0: years, 1: total, 2: rail, 3: bus, 4: paratransit */
 
-function fetchData(URL) {
-    return fetch(URL)
+// Make ajax request
+function fetchData(url) {
+    return fetch(url)
         .then((response) => {
-            // console.dir(response);
             return response.json();
         })
 
 }
 
-function getData(URL) {
-    return fetchData(URL)
+// Parse ajax response
+function getData(url) {
+    return fetchData(url)
         .then((json) => {
             console.log(json)
             json.map(obj => {
+                // Parse response and fill arrays with appropriate values
                 ALL[0].push(obj.year);
                 ALL[1].push(obj.total);
                 ALL[2].push(obj.rail);
@@ -36,7 +40,8 @@ function getData(URL) {
         });
 }
 
-getData('https://data.cityofchicago.org/resource/w8km-9pzd')
+// Call getData to fill ALL array with appropriate values from the ajax request
+getData(URL)
     .then(() => {
         let ctx = document.getElementById('myChart').getContext('2d');
         let chart = new Chart(ctx, {

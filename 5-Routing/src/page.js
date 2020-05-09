@@ -79,18 +79,21 @@ export default function Page() {
             );
         } else { // display form if redirect is false
             return (
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Please enter welcome message:
+                <section>
+                    <p>Hello!</p>
+                    <form onSubmit={handleSubmit}>
+                        <label>
+                            Please enter welcome message:
                     <input
-                            type="text"
-                            value={message}
-                            onChange={handleChange}
-                            autoFocus="true"
-                        />
-                    </label>
-                    <input type="submit" value="Submit" />
-                </form>
+                                type="text"
+                                value={message}
+                                onChange={handleChange}
+                                autoFocus="true"
+                            />
+                        </label>
+                        <input type="submit" value="Submit" />
+                    </form>
+                </section>
             );
         }
     }

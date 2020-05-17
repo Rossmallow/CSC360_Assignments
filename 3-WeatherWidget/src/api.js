@@ -1,6 +1,6 @@
 /* src/api.js */
-/* Ross Nelson Assignment 3: Weather Widget */
-/* April 28th, 2020 */
+/* Ross Nelson Assignment 6: HTTP Backend */
+/* May 19th, 2020 */
 
 export default (URL) => {
     return fetch(URL)

@@ -3,6 +3,7 @@
 /* May 19th, 2020 */
 
 const express = require('express');
+const session = require('express-session');
 const fetch = require('node-fetch');
 const app = express();
 
@@ -20,38 +21,45 @@ const fetchBS = () => {
     });
 };
 
-// const post = () => {
-//   const body = {
-//     title: "foo",
-//     body: "bar",
-//     userId: 1
-//   }
-
-//   fetch("https://jsonplaceholder.typicode.com/posts", {
-//     method: "post",
-//     body: JSON.stringify(body),
-//     headers: { "Content-Type": "application/json" }
-//   })
-//     .then(res => res.json())
-//     .then(json => console.log(json))
-//     .catch(err => console.log(err))
-// }
-
 app.set('view engine', 'hbs');
 app.use(express.static('public'));
+app.use(session({
+  secret: "Eu4bP#!7",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+
+let sessionData = undefined;
+
+const renderHomePage = async (res, wishlist = []) => {
+  let BS = await fetchBS();
+  res.render('index', {
+    title: 'RossCorp', bs: BS, wlistItems: wishlist
+  });
+};
 
 /* GET home page. */
-app.get('/', async function (req, res, next) {
-  let BS = await fetchBS();
-  // post();
-  res.render('index', {
-    title: 'RossCorp', bs: BS
-  });
+app.get('/', function (req, res, next) {
+  if (sessionData === undefined) {
+    sessionData = req.session;
+    sessionData.wishlist = [];
+  }
+  renderHomePage(res, sessionData.wishlist);
+});
+
+app.post('/', function (req, res) {
+  if (sessionData === undefined) {
+    sessionData = req.session;
+    sessionData.wishlist = [];
+  }
+  sessionData.wishlist.push({ item: req.body.wlistItem });
+  console.log(sessionData.wishlist);
+  renderHomePage(res, sessionData.wishlist);
 });
 
 app.get('/sqrt', function (req, res) {
-  let url = req.url.replace("?", "&");
-  let num = Number(new URLSearchParams(url).get('num'));
+  let num = Number(req.query.num);
   if (num < 1) {
     res.status(400).send("Please enter a valid number in the format: " +
       "/sqrt?num=[number].");

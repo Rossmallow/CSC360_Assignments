@@ -2,26 +2,31 @@
 <!-- Ross Nelson Assignment 6: HTTP Backend -->
 <!-- May 19th, 2020 -->
 
-<body>
-    <div class="wrapper">
-        <section>
-            <h1>{{title}}</h1>
-            <p>We are here to provide you services that <strong>{{bs}}</strong>.</p>
-        </section>
-        <section>
-            <form name="wishlist" action="/" method="post">
-                Wishlist:
-                <input type="text" name="wlistItem">
-                <input type="submit" value="Submit">
-            </form>
-        </section>
-    </div>
-    <footer>
-        <small>
-            Ross Nelson CSC360 Assignment 6: HTTP Backend
-            <br>
-            Find this code on <a
-                href='https://github.com/Rossmallow/CSC360_Assignments/tree/master/6-HTTPBackend'>GitHub</a>
-        </small>
-    </footer>
-</body>
+
+<div class="wrapper">
+    <section>
+        <h1>{{title}}</h1>
+        <p>We are here to provide you services that <strong>{{bs}}</strong>.</p>
+    </section>
+    <section>
+        <form name="wishlist" action="/" method="post">
+            Wishlist:<br />
+            <input type="text" name="wlistItem"><br />
+            <input type="submit" value="Submit">
+        </form>
+        <ul>
+            {{#each wlistItems}}
+            <li>{{item}}</li>
+            {{/each}}
+        </ul>
+        {{!-- <p>{{wlistItems}}</p> --}}
+    </section>
+</div>
+<footer>
+    <small>
+        Ross Nelson CSC360 Assignment 6: HTTP Backend
+        <br>
+        Find this code on <a
+            href='https://github.com/Rossmallow/CSC360_Assignments/tree/master/6-HTTPBackend'>GitHub</a>
+    </small>
+</footer>

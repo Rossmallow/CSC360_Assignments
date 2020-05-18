@@ -52,6 +52,10 @@ app.get('/', async function (req, res, next) {
 app.get('/sqrt', function (req, res) {
   let url = req.url.replace("?", "&");
   let num = Number(new URLSearchParams(url).get('num'));
+  if (num < 1) {
+    res.status(400).send("Please enter a valid number in the format: " +
+      "/sqrt?num=[number].");
+  }
   res.send({ sqrt: Math.sqrt(num) });
 });
 

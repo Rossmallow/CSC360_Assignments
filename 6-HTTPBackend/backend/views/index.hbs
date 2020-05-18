@@ -4,8 +4,17 @@
 
 <body>
     <div class="wrapper">
-        <h1>{{title}}</h1>
-        <p>We are here to provide you services that <strong>{{bs}}</strong>.</p>
+        <section>
+            <h1>{{title}}</h1>
+            <p>We are here to provide you services that <strong>{{bs}}</strong>.</p>
+        </section>
+        <section>
+            <form name="wishlist" action="/" method="post">
+                Wishlist:
+                <input type="text" name="wlistItem">
+                <input type="submit" value="Submit">
+            </form>
+        </section>
     </div>
     <footer>
         <small>

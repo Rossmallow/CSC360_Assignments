@@ -20,22 +20,22 @@ const fetchBS = () => {
     });
 };
 
-const post = () => {
-  const body = {
-    title: "foo",
-    body: "bar",
-    userId: 1
-  }
+// const post = () => {
+//   const body = {
+//     title: "foo",
+//     body: "bar",
+//     userId: 1
+//   }
 
-  fetch("https://jsonplaceholder.typicode.com/posts", {
-    method: "post",
-    body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.log(err))
-}
+//   fetch("https://jsonplaceholder.typicode.com/posts", {
+//     method: "post",
+//     body: JSON.stringify(body),
+//     headers: { "Content-Type": "application/json" }
+//   })
+//     .then(res => res.json())
+//     .then(json => console.log(json))
+//     .catch(err => console.log(err))
+// }
 
 app.set('view engine', 'hbs');
 app.use(express.static('public'));
@@ -43,7 +43,7 @@ app.use(express.static('public'));
 /* GET home page. */
 app.get('/', async function (req, res, next) {
   let BS = await fetchBS();
-  post();
+  // post();
   res.render('index', {
     title: 'RossCorp', bs: BS
   });

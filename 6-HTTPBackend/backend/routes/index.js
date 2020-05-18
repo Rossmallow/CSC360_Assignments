@@ -50,7 +50,9 @@ app.get('/', async function (req, res, next) {
 });
 
 app.get('/sqrt', function (req, res) {
-  res.send({ sqrt: 2 });
+  let url = req.url.replace("?", "&");
+  let num = Number(new URLSearchParams(url).get('num'));
+  res.send({ sqrt: Math.sqrt(num) });
 });
 
 app.use(function (req, res, next) {

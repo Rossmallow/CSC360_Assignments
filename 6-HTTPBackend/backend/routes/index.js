@@ -1,14 +1,18 @@
+/* routes/index.js */
+/* Ross Nelson Assignment 6: HTTP Backend */
+/* May 19th, 2020 */
+
 const express = require('express');
 const fetch = require('node-fetch');
-const router = express.Router();
+const app = express();
 
-module.exports = router;
+module.exports = app;
 
 const fetchBS = () => {
   return fetch('https://corporatebs-generator.sameerkumar.website/')
     .then(response => response.json())
     .then(data => {
-      return renderPage(data.phrase.toLowerCase());
+      return data.phrase.toLowerCase();
     })
     .catch(err => {
       console.error("BS request failed", err);
@@ -33,17 +37,22 @@ const post = () => {
     .catch(err => console.log(err))
 }
 
-fetchBS();
+app.set('view engine', 'hbs');
+app.use(express.static('public'));
 
-
-const renderPage = (BS) => {
-  /* GET home page. */
-  router.get('/', function (req, res, next) {
-    res.render('index', {
-      title: 'RossCorp', bs: BS
-    });
-  });
-
+/* GET home page. */
+app.get('/', async function (req, res, next) {
+  let BS = await fetchBS();
   post();
-}
+  res.render('index', {
+    title: 'RossCorp', bs: BS
+  });
+});
 
+app.get('/sqrt', function (req, res) {
+  res.send({ sqrt: 2 });
+});
+
+app.use(function (req, res, next) {
+  res.status(404).send("Invalid page. Try again!");
+});
